@@ -1,4 +1,10 @@
-import React, { InputHTMLAttributes, useEffect, useRef } from 'react';
+import React, {
+  InputHTMLAttributes,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from 'react';
 import { IconBaseProps } from 'react-icons';
 import { useField } from '@unform/core';
 
@@ -10,8 +16,26 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
-  const inputRef = useRef(null);
-  const { fieldName, defaultValue, error, registerField } = useField(name);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const [isFocused, setIsFocused] = useState(false);
+  const [isFilled, setIsFilled] = useState(false);
+
+  const { fieldName, defaultValue, error, registerField } = useField(name); //eslint-disable-line
+
+  /* Com o useCallback garantimos que a função seja criada apenas uma vez, independente
+  da quantidade de vezes que o componente mudar */
+  const handleInputFocus = useCallback(() => {
+    setIsFocused(true);
+  }, []);
+
+  /* Toda vez que o Input é chamado essa função é recriada na memoria, usamos o useCallback para evitar isso */
+  const handleInputBlur = useCallback(() => {
+    setIsFocused(false);
+
+    /* Faz uma verificação, se o input tiver algum valor seta com true, se não como false */
+    setIsFilled(!!inputRef.current?.value);
+  }, []);
 
   useEffect(() => {
     registerField({
@@ -22,9 +46,15 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
   }, [fieldName, registerField]);
 
   return (
-    <Container>
+    <Container isFilled={isFilled} isFocused={isFocused}>
       {Icon && <Icon size={20} />}
-      <input defaultValue={defaultValue} ref={inputRef} {...rest} />
+      <input
+        onFocus={handleInputFocus}
+        onBlur={handleInputBlur}
+        defaultValue={defaultValue}
+        ref={inputRef}
+        {...rest}
+      />
     </Container>
   );
 };
