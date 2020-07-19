@@ -21,7 +21,7 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
 
-  const { fieldName, defaultValue, error, registerField } = useField(name); //eslint-disable-line
+  const { fieldName, defaultValue, error, registerField } = useField(name);
 
   /* Com o useCallback garantimos que a função seja criada apenas uma vez, independente
   da quantidade de vezes que o componente mudar */
@@ -55,6 +55,7 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
         ref={inputRef}
         {...rest}
       />
+      {error}
     </Container>
   );
 };
