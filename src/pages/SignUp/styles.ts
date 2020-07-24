@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { shade } from 'polished';
 
 import SignUpBackgroundImg from '../../assets/sign-up-background.png';
@@ -15,14 +15,33 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  /* Todo conteudo da div vai ficar no centro */
-  place-content: center;
+  justify-content: center;
   width: 100%;
   max-width: 700px;
+`;
+
+// criar a animação
+const appearFromRight = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+export const AnimationContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  animation: ${appearFromRight} 1s;
 
   form {
-    margin: 60px 0;
+    margin: 80px 0;
     width: 340px;
     text-align: center;
 
@@ -45,7 +64,7 @@ export const Content = styled.div`
 
   /*estiliza todos a que vem diretamente dentro do conten, não um nivel pra dentro, para não prejudicar o outro a */
   > a {
-    color: #f4ede8;
+    color: #ff9000;
     display: block;
     margin-top: 24px;
     text-decoration: none;
@@ -59,7 +78,7 @@ export const Content = styled.div`
     }
 
     &:hover {
-      color: ${shade(0.2, '#f4ede8')};
+      color: ${shade(0.2, '#ff9000')};
     }
   }
 `;
