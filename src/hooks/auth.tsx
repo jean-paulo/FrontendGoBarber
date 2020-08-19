@@ -33,6 +33,7 @@ const AuthProvider: React.FC = ({ children }) => {
     // Se ja existir no localstorage as informações, retorna como valor inical para esse estado
     // os valores de token e user | o JSON.parse transforma de stringfy para objeto
     if (token && user) {
+      api.defaults.headers.authorization = `Bearer ${token}`;
       return { token, user: JSON.parse(user) };
     }
 
@@ -50,6 +51,9 @@ const AuthProvider: React.FC = ({ children }) => {
 
     localStorage.setItem('@GoBarber:token', token);
     localStorage.setItem('@GoBarber:user', JSON.stringify(user));
+
+    /* Automatiza o uso do token nas rotas que necessitam dele */
+    api.defaults.headers.authorization = `Bearer ${token}`;
 
     setData({ token, user });
   }, []);
